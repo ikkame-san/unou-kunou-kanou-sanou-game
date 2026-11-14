@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#f5f3ec">
+  <meta name="description" content="ウノウ・クノウ・カノウ・サノウから選ぶ4択クイズ。全81問、1問15秒。">
+  <title>ウノウクノウカノウサノウ -ゲーム ver.-</title>
+  <link rel="icon" href="./favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="./style.css">
+  <script defer src="./questions.js"></script>
+  <script defer src="./timer.js"></script>
+  <script defer src="./deck.js?v=20261114"></script>
+  <script defer src="./app.js?v=20261114"></script>
+</head>
+<body data-screen="home">
+  <div class="site-shell">
+    <header class="header">
+      <button class="brand brand-title" id="brand" aria-label="タイトル画面へ" hidden>ウノウクノウカノウサノウ<small>-ゲーム ver.-</small></button>
+      <span id="counter" class="counter" aria-label="出題番号" hidden></span>
+      <div class="header-actions">
+        <button id="sound" class="icon-button" aria-label="効果音をオンにする" aria-pressed="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M11 5 6 9H3v6h3l5 4V5ZM16 9l5 6m0-6-5 6"/></svg></button>
+        <button id="help" class="icon-button" aria-label="遊び方">?</button>
+        <button id="quit" class="icon-button" aria-label="終了する" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18"/></svg></button>
+      </div>
+    </header>
+    <main id="main">
+      <section id="home" class="home">
+        <h1 class="title-logo" aria-label="ウノウクノウカノウサノウ"><span>ウノウクノウ</span><span>カノウサノウ</span></h1>
+        <p class="title-version">-ゲームver.-</p>
+        <button class="primary start" id="start">はじめる</button>
+        <p id="best" class="best" hidden></p>
+      </section>
+
+      <section id="game" class="game" hidden>
+        <div class="question-area">
+          <div id="timer" class="timer" role="progressbar" aria-label="回答の残り時間" aria-valuemin="0" aria-valuemax="15" aria-valuenow="15" aria-valuetext="残り15秒"><div id="timer-fill" class="timer-fill" aria-hidden="true"></div></div>
+          <h2 id="question" tabindex="-1"></h2>
+          <div id="visual" class="visual" hidden></div>
+          <div id="feedback" class="feedback" hidden role="status" aria-live="polite" tabindex="-1">
+            <div class="feedback-title"><span id="verdict-mark" class="verdict-mark" aria-hidden="true"></span><span id="verdict" class="sr-only"></span><span id="correct-answer"></span></div>
+            <p id="explanation"></p>
+            <a id="source" target="_blank" rel="noopener noreferrer" hidden></a>
+          </div>
+        </div>
+      </section>
+
+      <section id="result" class="result" hidden>
+        <h2>結果</h2>
+        <div class="result-summary"><div class="result-score"><strong id="result-score"></strong><span id="result-total"></span><small>正解</small></div><div class="result-metrics"><div><strong id="accuracy"></strong><span>正解率</span></div><div><strong id="max-streak"></strong><span>最高連続正解</span></div></div></div>
+        <div id="answer-stats" class="answer-stats"></div>
+        <div class="result-actions"><button class="primary" id="retry">もう一度</button><button class="text-button" id="home-button">タイトルへ</button></div>
+        <details id="history"><summary>解答・解説</summary><div id="history-list"></div></details>
+      </section>
+    </main>
+  </div>
+
+  <div id="answer-effect" class="answer-effect" aria-hidden="true" hidden>
+    <svg class="effect-symbol effect-circle" viewBox="0 0 160 160"><circle class="effect-stroke" cx="80" cy="80" r="58" pathLength="1"/></svg>
+    <svg class="effect-symbol effect-cross" viewBox="0 0 160 160"><path class="effect-stroke" d="M37 37 123 123M123 37 37 123" pathLength="1"/></svg>
+  </div>
+  <section id="answer-dock" class="answer-dock" aria-label="4つの選択肢" hidden><div class="answers">
+    <button class="answer green" data-answer="ウノウ" disabled><span class="answer-word">ウノウ</span><span class="answer-mark" aria-hidden="true"></span></button>
+    <button class="answer coral" data-answer="クノウ" disabled><span class="answer-word">クノウ</span><span class="answer-mark" aria-hidden="true"></span></button>
+    <button class="answer purple" data-answer="カノウ" disabled><span class="answer-word">カノウ</span><span class="answer-mark" aria-hidden="true"></span></button>
+    <button class="answer blue" data-answer="サノウ" disabled><span class="answer-word">サノウ</span><span class="answer-mark" aria-hidden="true"></span></button>
+  </div></section>
+
+  <dialog id="help-dialog"><div class="dialog-heading"><h2>遊び方</h2><button class="icon-button" data-close="help-dialog" aria-label="遊び方を閉じる">×</button></div>
+    <p>答えをタップするか、1〜4キーで選択します。</p>
+    <div class="help-keys"><span><kbd>1</kbd> ウノウ</span><span><kbd>2</kbd> クノウ</span><span><kbd>3</kbd> カノウ</span><span><kbd>4</kbd> サノウ</span></div>
+    <p>1問15秒。正解後は2秒、不正解・時間切れ後は3.5秒、解説を表示して自動で進みます。正解は1点、時間切れは0点です。</p>
+    <p>1回10問。正解の選択肢がなるべく均等になるように出題します。全81問を使い切るまで問題は重複しません。出題履歴はこのブラウザに保存します。</p>
+    <p class="fine-print">この画面や終了確認を開いている間、別のタブを見ている間は時間を止めます。解説は結果画面でも確認できます。</p>
+    <button class="primary" data-close="help-dialog">閉じる</button>
+  </dialog>
+  <dialog id="quit-dialog"><h2>終了しますか？</h2><p>回答済みの問題で結果を表示します。</p><div class="dialog-actions"><button class="secondary" data-close="quit-dialog">続ける</button><button class="primary" id="confirm-quit">終了する</button></div></dialog>
+  <noscript><div class="noscript">JavaScriptを有効にしてください。</div></noscript>
+</body>
+</html>
