@@ -6,6 +6,7 @@
   const $ = id => document.getElementById(id);
   const answerButtons = [...document.querySelectorAll('.answer')];
   const selectedCount = 10;
+  const shareGameUrl = 'https://ikkame-san.github.io/unou-kunou-kanou-sanou-game/';
   let storage = null;
   try { storage = window.localStorage; } catch { /* 保存を許可しないブラウザにも対応。 */ }
   const deck = new window.QuizDeck(questions, storage);
@@ -160,14 +161,16 @@
   function choose(word) {
     if (phase !== 'game' || answered || document.querySelector('dialog[open]')) return;
     // 締切とクリックが同時になっても、期限後の回答を正解にしない。
-    if (word !== null && timer.running && timer.now() >= timer.deadline) word = null;
+    const remaining = timer.getRemaining();
+    if (remaining <= 0) word = null;
     timer.stop();
     const timedOut = word === null;
     const q = round[index], correct = word === q.answer;
     answered = true;
     streak = correct ? streak + 1 : 0;
     maxStreak = Math.max(maxStreak, streak);
-    records.push({ question: q, chosen: word, correct, timedOut });
+    const answerMs = timedOut ? QUESTION_TIME_MS : QUESTION_TIME_MS - remaining;
+    records.push({ question: q, chosen: word, correct, timedOut, answerMs });
     answerButtons.forEach(button => {
       button.disabled = true;
       const value = button.dataset.answer;
@@ -208,10 +211,21 @@
     resetAnswers(false);
     const score = records.filter(r => r.correct).length, total = records.length;
     const accuracy = total ? Math.round(score / total * 100) : 0;
+    const answerTime = `${(records.reduce((sum, record) => sum + record.answerMs, 0) / 1000).toFixed(1)}秒`;
     $('result-score').textContent = score;
     $('result-total').textContent = `/ ${total}`;
     $('accuracy').textContent = `${accuracy}%`;
     $('max-streak').textContent = `${maxStreak}問`;
+    $('total-answer-time').textContent = answerTime;
+    const shareLink = $('share-x');
+    shareLink.hidden = total === 0;
+    shareLink.removeAttribute('href');
+    if (total) {
+      const intent = new URL('https://twitter.com/intent/tweet');
+      intent.searchParams.set('text', `ウノウクノウカノウサノウ -ゲーム ver.-\n${total}問中${score}問正解\nトータル解答時間 ${answerTime}`);
+      intent.searchParams.set('url', shareGameUrl);
+      shareLink.setAttribute('href', intent.href);
+    }
     $('answer-stats').replaceChildren();
     words.forEach((word, j) => {
       const entries = records.filter(r => r.question.answer === word);

@@ -52,6 +52,10 @@ body[data-screen="home"]{background:#faf9f5}
 .feedback-title{gap:12px}
 #correct-answer{font-size:20px;font-weight:800;letter-spacing:.04em}
 #source{width:fit-content}
+.result-time{margin-top:16px;font-size:16px;color:var(--muted)}
+.result-time strong{margin-inline-start:6px;color:var(--ink);font-variant-numeric:tabular-nums}
+#share-x{display:inline-flex;align-items:center;justify-content:center;color:var(--ink);text-decoration:none}
+@media(max-width:760px){#share-x{width:100%}}
 body[data-screen="game"] .header{max-width:760px;margin:auto}
 @media(max-width:760px){.header{height:64px}.home{min-height:calc(100dvh - 64px - env(safe-area-inset-bottom));padding:24px 0 64px}.title-logo{font-size:clamp(40px,12.1vw,83px)}.title-version{margin-top:22px}.home .start{margin-top:38px}.game{padding-top:2px}#question{margin-top:24px}#correct-answer{font-size:19px}}
 @media(max-height:500px) and (min-width:600px){.home{padding:12px 0 24px}.title-logo{font-size:49px}.title-version{font-size:21px;margin-top:12px}.home .start{margin-top:19px}}

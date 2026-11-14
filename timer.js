@@ -17,10 +17,13 @@
       this.onExpire = onExpire;
       this.resume();
     }
+    getRemaining() {
+      return this.running ? Math.max(0, this.deadline - this.now()) : this.remaining;
+    }
     tick() {
       this.handle = null;
       if (!this.running) return;
-      this.remaining = Math.max(0, this.deadline - this.now());
+      this.remaining = this.getRemaining();
       this.onTick(this.remaining);
       if (!this.remaining) {
         this.running = false;
@@ -31,7 +34,7 @@
     }
     pause() {
       if (!this.running) return;
-      this.remaining = Math.max(0, this.deadline - this.now());
+      this.remaining = this.getRemaining();
       this.running = false;
       this.cancel(this.handle);
       this.handle = null;

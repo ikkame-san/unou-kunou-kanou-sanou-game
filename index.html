@@ -7,11 +7,11 @@
   <meta name="description" content="ウノウ・クノウ・カノウ・サノウから選ぶ4択クイズ。全81問、1問15秒。">
   <title>ウノウクノウカノウサノウ -ゲーム ver.-</title>
   <link rel="icon" href="./favicon.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="./style.css">
+  <link rel="stylesheet" href="./style.css?v=share-x">
   <script defer src="./questions.js"></script>
-  <script defer src="./timer.js"></script>
+  <script defer src="./timer.js?v=share-x"></script>
   <script defer src="./deck.js?v=20261114"></script>
-  <script defer src="./app.js?v=20261114"></script>
+  <script defer src="./app.js?v=share-x"></script>
 </head>
 <body data-screen="home">
   <div class="site-shell">
@@ -48,8 +48,9 @@
       <section id="result" class="result" hidden>
         <h2>結果</h2>
         <div class="result-summary"><div class="result-score"><strong id="result-score"></strong><span id="result-total"></span><small>正解</small></div><div class="result-metrics"><div><strong id="accuracy"></strong><span>正解率</span></div><div><strong id="max-streak"></strong><span>最高連続正解</span></div></div></div>
+        <p class="result-time">トータル解答時間 <strong id="total-answer-time"></strong></p>
         <div id="answer-stats" class="answer-stats"></div>
-        <div class="result-actions"><button class="primary" id="retry">もう一度</button><button class="text-button" id="home-button">タイトルへ</button></div>
+        <div class="result-actions"><button class="primary" id="retry">もう一度</button><a class="secondary" id="share-x" target="_blank" rel="noopener noreferrer" hidden>Xで共有</a><button class="text-button" id="home-button">タイトルへ</button></div>
         <details id="history"><summary>解答・解説</summary><div id="history-list"></div></details>
       </section>
     </main>
